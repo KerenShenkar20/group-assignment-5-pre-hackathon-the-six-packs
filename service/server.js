@@ -3,6 +3,8 @@ const express = require('express');
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+const datapath = require('./data/data.json')
+let total = 500;
 
 // Server static assets 
 app.all('*', function (req, res, next) {
@@ -16,6 +18,50 @@ app.all('*', function (req, res, next) {
   //Routs Middlewares
   const usersRouter = require('./routes/users');
   app.use('/users', usersRouter);
+
+  app.post('/user/create', (req, res) => {
+    
+    createUser(req, res)
+})
+
+app.get('/user/read:id', (req,res) => {
+
+    readUser(req, res)
+})
+
+app.put('/user/update:id', (req, res) => {
+
+    updateUser(req, res)
+})
+
+
+app.delete('/user/delete:id', (req, res) => {
+    deleteUser(req, res)
+})
+
+  const readUser = (req, res) => {
+
+    const usersList = datapath;
+    res.send({sucsess: true, usersList})
+  }
+  
+  const updateUser = (req, res) => {
+    const usersList = datapath
+    if (req.params.id < 0 || req.params.id > 500) {
+        return res.send({error: true, msg: 'User not exist'})
+    }
+    const id = req.params.id
+    usersList[id].first_name = req.params.first_name
+    usersList[id].last_name = req.params.last_name
+    usersList[id].email = req.params.email
+    usersList[id].country = req.params.country
+    usersList[id].avatar = req.params.avatar
+    usersList[id].color = req.params.color   
+    usersList[id].job = req.params.job 
+    usersList.push(usersList[id])
+    res.send({success: true, msg: 'User data updated successfully'})
+}
+
 
 
 //Listening on port 

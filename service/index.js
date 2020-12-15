@@ -18,7 +18,7 @@ app.all('*', function(req, res, next) {
 });
 
 //Routs Middlewares
-const usersRouter = require('./routes/users');
+const usersRouter = require('../routes/users');
 app.use('/users', usersRouter);
 
 

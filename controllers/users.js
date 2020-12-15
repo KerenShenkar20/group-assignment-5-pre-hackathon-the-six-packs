@@ -41,7 +41,7 @@ const createUser = async (req, res) => {
     }
 }
 
-const readUser = (req, res) => {
+const readUser = async(req, res) => {
     try {
         let userId = req.params.id;
         userModel.findOne({ _id: userId })
@@ -60,7 +60,7 @@ const readUser = (req, res) => {
     }
 }
 
-const updateUser = (req, res) => {
+const updateUser =async(req, res) => {
     try {
         let userId = req.params.id;
         let valid = validUser(req.body);

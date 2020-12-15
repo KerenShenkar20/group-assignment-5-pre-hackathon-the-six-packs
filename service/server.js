@@ -3,7 +3,7 @@ const usersRouter = require('../routes/users.js');
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-const datapath = require('./data/data.json')
+//const datapath = require('./data/data.json')
 let total = 500;
 
 // Server static assets 

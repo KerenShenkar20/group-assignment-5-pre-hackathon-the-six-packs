@@ -16,11 +16,11 @@ router.post("/add", async (req, res) => {
   control.createUser(req, res);
 })
 
-router.put("/:id",authToken, async (req, res) => {
+router.put("/:id", async (req, res) => {
   control.updateUser(req, res);
 })
 
-router.delete("/:id",authToken, (req,res) => {
+router.delete("/:id", (req,res) => {
   control.deleteUser(req, res);
 })
 

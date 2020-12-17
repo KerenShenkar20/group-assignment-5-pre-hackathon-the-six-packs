@@ -1,14 +1,14 @@
 $(function () {
-    getAllRestaurants();
+    getAllUsers();
     restaurantOperationsListeners();
 });
 
-function getAllRestaurants() {
+function getAllUsers() {
     $.ajax({
         url: 'http://localhost:3000/users',
         type: 'GET',
         success: function (rests) {
-            recreateRestaurantsTable(rests);
+            recreateUsersTable(rests);
             //console.log(rests);
         }
     });
@@ -28,43 +28,39 @@ function getRestaurantById(userId) {
 
 /////////////////////////////////////////////////////////////////////////////////////
 
-function showRestaurant(rest) {
+function showRestaurant(user) {
     $("#restaurant-result").empty();
 
     $("#restaurant-result").append(
         '<p>' +
-        'Name: ' + rest.first_name + '<br>' +
-        'Longitude: ' + rest.last_name + '<br>' +
+        'id" ' + user.id + '<br>' +
+        'Name: ' + user.first_name + ";" + user.last_name + '<br>' +
+        'email: ' + user.email + '<br>' +
+        'gender: ' + user.gender + '<br>' +
+        'avatar: ' + user.avatar + '<br>' +
+        'color: ' + user.color + '<br>' +
+        'job: ' + user.job + '<br>' +
         '<p>'
     );
 }
-// '<p>' +
-// 'id" ' + rest.id + '<br>' +
-// 'Name: ' + rest.first_name + '<br>' +
-// 'LastName: ' + rest.last_name + '<br>' +
-// 'email: ' + rest.email + '<br>' +
-// 'gender: ' + rest.gender + '<br>' +
-// 'avatar: ' + rest.avatar + '<br>' +
-// 'color: ' + rest.color + '<br>' +
-// 'job: ' + test.job + '<br>' +
-// '<p>'
 
 /////////////////////////////////////////////////////////////////////////////////////
 
-function recreateRestaurantsTable(rests) {
+function recreateUsersTable(rests) {
     $("table").empty().remove();
-    // $("#restaurant-result").empty().remove();
+
     console.log(rests);
-    rests.map(item => {
-        // console.log(rests);
-        // if(item)
-        //     item.location[0].lng = 0;
-        // console.log(item.location[0]);
+    rests.map(user => {
 
         $("#restaurants-list").append(
             '<p>' +
-            'Name: ' + item.first_name + '<br>' +
-            'Longitude: ' + item.last_name + '<br>' +
+            'id" ' + user.id + '<br>' +
+            'Name: ' + user.first_name + ";" + user.last_name + '<br>' +
+            'email: ' + user.email + '<br>' +
+            'gender: ' + user.gender + '<br>' +
+            'avatar: ' + user.avatar + '<br>' +
+            'color: ' + user.color + '<br>' +
+            'job: ' + user.job + '<br>' +
             '<p>'
         );
     })
@@ -79,7 +75,6 @@ function deleteRestaurantById(userId) {
         type: 'DELETE',
         success: function (rest) {
             console.log(`User - ${userId} Deleted!!!`)
-            showRestaurant(rest);
         }
     });
 }
@@ -93,48 +88,47 @@ function updateUserById(userId, obj) {
         data: JSON.stringify(obj),
         success: function () {
             console.log(`User - ${userId} Updated!!!`, obj)
-            getAllRestaurants();
+            getAllUsers();
         }
     });
 }
+
 function updatedUser(UserId) {
     user = new Object();
     if ($("#first_name").val())
         user.first_name = $("#first_name").val();
     if ($("#last_name").val())
         user.last_name = $("#last_name").val();
+    if ($("#email").val())
+        user.email = $("#email").val();
+    if ($("#gender").val())
+        user.gender = $("#gender").val();
+    if ($("#avatar").val())
+        user.avatar = $("#avatar").val();
+    if ($("#color").val())
+        user.color = $("#color").val();
+    if ($("#job").val())
+        user.job = $("#job").val();
+
     console.log(user);
     updateUserById(UserId, user);
 }
 
 function updateForm() {
     $("#get-delete-restaurant").hide();
-
     $("#test").append(
-        `
-        <label for="first_name">First name:</label><br>
+       ` <label for="first_name">First name:</label><br>
         <input type="text" id="first_name" name="first_name"><br>
         <label for="last_name">Last name:</label><br>
         <input type="text" id="last_name" name="last_name">
-        <button id="submit" type="submit">Send!</button>
-
-    `
+        <button id="submit" type="submit">Send!</button>`
+    
     );
 }
 
 function resetView() {
     $("#test").empty();
 }
-// function addView()
-// {
-//     $("#get-delete-restaurant").append(
-
-//         `<input type="text" id="rest-id" name="rest-id"/>
-//         <button type="button" class="btn btn-primary" id="get-delete-do"></button>
-//         <section id="restaurant-result"></section>`)
-//     $("#get-delete-restaurant").css("display", "none");
-// }
-
 
 /////////////////////////////////////////////////////////////////////////////////////
 
@@ -147,7 +141,6 @@ function restaurantOperationsListeners() {
     $("#delete-button").click(() => {
         $("#get-delete-restaurant").css("display", "block");
         $("#get-delete-do").text("Delete");
-
     });
 
     $("#add-button").click(() => {
@@ -163,20 +156,16 @@ function restaurantOperationsListeners() {
         if ($("#get-delete-do").text() === "Get") {
             const UserId = $("#rest-id").val();
             getRestaurantById(UserId);
-        }
-        else if ($("#get-delete-do").text() === "Delete") {
+        } else if ($("#get-delete-do").text() === "Delete") {
             const UserId = $("#rest-id").val();
             deleteRestaurantById(UserId);
-        }
-        else if ($("#get-delete-do").text() === "Update") {
+        } else if ($("#get-delete-do").text() === "Update") {
             const UserId = $("#rest-id").val();
             updateForm();
             $("#submit").click(() => {
                 updatedUser(UserId)
                 resetView();
-                // addView();
             });
         }
-    }
-    );
+    });
 }

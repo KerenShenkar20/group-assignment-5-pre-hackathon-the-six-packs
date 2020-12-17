@@ -1,28 +1,12 @@
-const express = require('express');
-const router = express.Router();
-const control = require('../controllers/users')
+const { Router } = require('express');
+const {userDBcontroller} = require('../controllers/users');
 
+const UserRouter = new Router();
 
-/* GET all users */
-router.get('/', async (req, res) => {
-  control.getUsers(req,res);
-});
+UserRouter.get('/',userDBcontroller.getUsers);            //localhostn:3000/api/retaurants
+UserRouter.get('/:id',userDBcontroller.getUser);          //localhostn:3000/api/retaurants/5
+UserRouter.post('/',userDBcontroller.addUser);            //localhostn:3000/api/retaurants
+UserRouter.put('/:id',userDBcontroller.updateUser);       //localhostn:3000/api/retaurants
+UserRouter.delete('/:id',userDBcontroller.deleteUser);    //localhostn:3000/api/retaurants
 
-router.post("/user/:id", async (req, res) => {
-  control.createUser(req, res);
-})
-
-router.post("/add", async (req, res) => {
-  control.createUser(req, res);
-})
-
-router.put("/:id", async (req, res) => {
-  control.updateUser(req, res);
-})
-
-router.delete("/:id", (req,res) => {
-  control.deleteUser(req, res);
-})
-
-
-module.exports = router;
+module.exports = { UserRouter };

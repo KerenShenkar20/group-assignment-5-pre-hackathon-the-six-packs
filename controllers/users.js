@@ -1,113 +1,43 @@
-const express = require('express');
-const { userModel } = require("../model/users");
-const { validUser } = require("../validation/users");
+const User = require('../model/users');
 
-
-const getUsers = async (req, res) => {
-    try {
-        userModel.find({}, { email: 1, user: 1 })
-            .then(data => { res.json(data); })
-            .catch(err => { res.status(400).json(err); })
-    }
-    catch (err) {
-        res.status(500).json({
-            status: 500,
-            message: err.message,
-        })
-    }
-}
-
-const createUser = async (req, res) => {
-    try {
-        let valid = validUser(req.body);
-        if (!valid.error) {
-            try {
-                let data = await userModel.insertMany([req.body]);
-                res.json(data)
-            }
-            catch (err) {
-                res.status(400).json({ message: "user already in system ", code: "duplicate" });
-            }
+exports.userDBcontroller = {
+    getUsers(req, res) {
+        User.find({})
+            .then(docs => { res.json(docs) })
+            .catch(err => console.log(`Error getting the data from DB: ${err}`));
+    },
+    getUser(req, res) {
+        const query = req.query; 
+        if(Object.keys(query).length == 0){
+            User.findOne({ id: req.params.id })
+            .then(docs => { res.json(docs) })
+            .catch(err => console.log(`Error getting restaurant from db: ${err}`));
         }
-        else {
-            res.status(400).json(valid.error.details);
+        else if(query.name){
+            User.findOne({ name: query.name })
+            .then(docs => { res.json(docs) })
+            .catch(err => console.log(`Error getting restaurant from db: ${err}`));
         }
-    }
-    catch (err) {
-        res.status(500).json({
-            status: 500,
-            message: err.message,
-        })
-    }
-}
-
-const readUser = async(req, res) => {
-    try {
-        let userId = req.params.id;
-        userModel.findOne({ _id: userId })
-            .then(data => {
-                res.json(data);
-            })
-            .catch(err => {
-                res.status(400).json(err);
-            })
-    }
-    catch (err) {
-        res.status(500).json({
-            status: 500,
-            message: err.message,
-        })
-    }
-}
-
-const updateUser =async(req, res) => {
-    try {
-        let userId = req.params.id;
-        let valid = validUser(req.body);
-        if (!valid.error) {
-            try {
-                let data = await userModel.updateOne({ _id: userId }, req.body);
-                res.json(data);
-            }
-            catch (err) {
-                res.status(400).json({ message: "user already in system ", code: "duplicate" });
-            }
+    },
+    addUser(req, res) {
+        const {body} = req;
+        const newRestaurant = new User(body);
+        const result = newRestaurant.save();
+        if (result) {
+            res.json(newRestaurant)
+        } else {
+            res.status(404).send("Error saving a restaurant");
         }
-        else {
-            res.status(400).json(valid.error.details);
-        }
-    }
-    catch (err) {
-        res.status(500).json({
-            status: 500,
-            message: err.message,
-        })
-    }
+    },
+    deleteUser(req, res) {
+        User.deleteOne({ id: req.params.id } ) 
+            .then(docs => { res.json(docs) })
+            .catch(err => console.log(`Error deleting restaurant from db: ${err}`));
+    },
+    updateUser(req, res) {
+        const {body} = req;
+        User.updateOne({ id: req.params.id } , body ) 
+            .then(docs => { res.json(docs) })
+            .catch(err => console.log(`Error updating restaurant from db: ${err}`));
+    },
 }
-
-
-const deleteUser = async (req, res) => {
-    try {
-        let userId = req.params.id;
-        //delete user
-        userModel.deleteOne({ _id: userId }, (err, data) => {
-            if (err) { res.status(400).json(err) }
-            res.json(data);
-        })
-    }
-    catch (err) {
-        res.status(500).json({
-            status: 500,
-            message: err.message,
-        })
-    }
-}
-
-
-module.exports = {
-    getUsers,
-    createUser,
-    readUser,
-    updateUser,
-    deleteUser
-};

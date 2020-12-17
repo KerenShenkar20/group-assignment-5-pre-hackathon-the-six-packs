@@ -38,6 +38,16 @@ function showRestaurant(rest) {
         '<p>'
     );
 }
+// '<p>' +
+// 'id" ' + rest.id + '<br>' +
+// 'Name: ' + rest.first_name + '<br>' +
+// 'LastName: ' + rest.last_name + '<br>' +
+// 'email: ' + rest.email + '<br>' +
+// 'gender: ' + rest.gender + '<br>' +
+// 'avatar: ' + rest.avatar + '<br>' +
+// 'color: ' + rest.color + '<br>' +
+// 'job: ' + test.job + '<br>' +
+// '<p>'
 
 /////////////////////////////////////////////////////////////////////////////////////
 

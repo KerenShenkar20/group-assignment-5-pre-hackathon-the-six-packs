@@ -1,12 +1,10 @@
-require('dotenv').config();
-require('./server');
-require('./db_connection');
-
 const express = require('express');
-
+const usersRouter = require('../routes/users.js');
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+//const datapath = require('./data/data.json')
+let total = 500;
 
 // Server static assets 
 app.all('*', function(req, res, next) {
@@ -17,11 +15,32 @@ app.all('*', function(req, res, next) {
     next();
 });
 
-//Routs Middlewares
-const usersRouter = require('../routes/users');
+//Routs Middlewares mmmk
 app.use('/users', usersRouter);
+
+//   app.post('/user/create', (req, res) => {
+    
+//     createUser(req, res)
+// })
+
+// app.get('/user/read:id', (req,res) => {
+
+//     readUser(req, res)
+// })
+
+// app.put('/user/update:id', (req, res) => {
+
+//     updateUser(req, res)
+// })
+
+
+// app.delete('/user/delete:id', (req, res) => {
+//     deleteUser(req, res)
+// })
+
+
 
 
 //Listening on port 
 const port = process.env.PORT || 3000;
-app.listen(port, () => console.log(colors.red.underline.bgBrightWhite(`Server running on port ${port}`)));
+app.listen(port, () => console.log((`Server running on port ${port}`)));
